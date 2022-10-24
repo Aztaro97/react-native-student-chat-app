@@ -3,6 +3,7 @@ import { Box, Button, Input } from "native-base";
 import React, { useEffect, useState } from "react";
 import { db } from "../../config/firebase";
 import { Color } from "../../constants/Colors";
+import useDebounce from "../../hook/useDebounce";
 
 interface Props {
   setFilterUsersList: React.Dispatch<React.SetStateAction<any[]>>;
@@ -15,6 +16,8 @@ const HeaderStudentSearch = ({
   setTextInput,
   textInput,
 }: Props) => {
+  const debounceValue = useDebounce(textInput, 400);
+
   const handleSearch = async (inputValue: string) => {
     try {
       let usersFilter = new Array();
@@ -34,7 +37,7 @@ const HeaderStudentSearch = ({
 
   useEffect(() => {
     textInput !== "" && handleSearch(textInput);
-  }, [textInput]);
+  }, [debounceValue]);
 
   return (
     <Box my={2} px={3} py={4}>
